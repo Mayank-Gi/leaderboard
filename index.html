@@ -580,11 +580,21 @@
                         <td><span class="status status-in-progress">In Progress</span></td>
                     </tr>
                     <tr>
+                        <td class="team-name">Ravindra Jain</td>
+                        <td><span class="type-badge type-blog" title="Cloud Infra Automation">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/Ravindra Jain.jpg" alt="Ravindra Jain" class="member-photo" title="Ravindra Jain">
+                            </div>
+                        </td>
+                        <td><span class="status status-in-progress">In Progress</span></td>
+                    </tr>
+                    <tr>
                         <td class="team-name">Rajdeep Dabral</td>
                         <td><span class="type-badge type-blog" title="Migrating MySQL Data to Elasticsearch: A Practical Guide">Blog</span></td>
                         <td>
                             <div class="members-container">
-                                <img src="images/rajdeep dabral.jpg" alt="Rajdeep Dabral" class="member-photo" title="Rajdeep Dabral">
+                                <img src="images/rajdeep dabral.jpg" alt="Rajdeep Dabral" class="member-photo" title="Rajdeep Dabral" style="object-position: center top; object-fit: cover;">
                             </div>
                         </td>
                         <td><span class="status status-in-review">In Review</span></td>
@@ -651,29 +661,47 @@
                     tooltip.textContent = tooltipText;
                     document.body.appendChild(tooltip);
                     
-                    // Position tooltip close to mouse cursor
-                    const photoRect = this.getBoundingClientRect();
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                    
-                    // Calculate position - position tooltip just above and slightly to the right of the photo
-                    const tooltipRect = tooltip.getBoundingClientRect();
-                    let left = photoRect.left + scrollLeft + (photoRect.width / 2) - (tooltipRect.width / 2);
-                    let top = photoRect.top + scrollTop - tooltipRect.height - 8; // 8px gap
-                    
-                    // Ensure tooltip stays within viewport
-                    const viewportWidth = window.innerWidth;
-                    if (left < 10) left = 10;
-                    if (left + tooltipRect.width > viewportWidth - 10) {
-                        left = viewportWidth - tooltipRect.width - 10;
+                    // Position tooltip directly above the photo, no gap, and follow on scroll
+                    function positionTooltip() {
+                        const photoRect = this.getBoundingClientRect();
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        
+                        // Calculate position relative to viewport
+                        let left = photoRect.left + (photoRect.width / 2) - (tooltipRect.width / 2);
+                        let top = photoRect.top - tooltipRect.height;
+                        
+                        // Keep tooltip within viewport horizontally
+                        const viewportWidth = window.innerWidth;
+                        if (left < 5) left = 5;
+                        if (left + tooltipRect.width > viewportWidth - 5) {
+                            left = viewportWidth - tooltipRect.width - 5;
+                        }
+                        
+                        // If not enough space above, show below
+                        if (top < 5) {
+                            top = photoRect.bottom;
+                        }
+                        
+                        // If tooltip would go below viewport, clamp it to bottom
+                        const viewportHeight = window.innerHeight;
+                        if (top + tooltipRect.height > viewportHeight - 5) {
+                            top = viewportHeight - tooltipRect.height - 5;
+                        }
+                        
+                        // Use fixed positioning so tooltip stays with photo
+                        tooltip.style.position = 'fixed';
+                        tooltip.style.left = left + 'px';
+                        tooltip.style.top = top + 'px';
                     }
-                    if (top < 10) {
-                        // If no space above, show below with small gap - use photoRect.bottom directly
-                        top = photoRect.bottom + scrollTop + 5; // smaller gap for below positioning
-                    }
-
-                    tooltip.style.left = left + 'px';
-                    tooltip.style.top = top + 'px';
+                    
+                    positionTooltip.call(this);
+                    const positionHandler = positionTooltip.bind(this);
+                    window.addEventListener('scroll', positionHandler);
+                    window.addEventListener('resize', positionHandler);
+                    tooltip._removeListeners = function() {
+                        window.removeEventListener('scroll', positionHandler);
+                        window.removeEventListener('resize', positionHandler);
+                    };
 
                     // Show tooltip with animation
                     setTimeout(() => tooltip.classList.add('show'), 10);
@@ -683,6 +711,7 @@
                     const tooltip = document.querySelector('.member-tooltip');
                     if (tooltip) {
                         tooltip.classList.remove('show');
+                        if (tooltip._removeListeners) tooltip._removeListeners();
                         setTimeout(() => tooltip.remove(), 300);
                     }
                 });
@@ -739,66 +768,94 @@
                 });
             });
 
-            // Custom tooltip for type-badge
-            const typeBadges = document.querySelectorAll('.type-badge');
-            typeBadges.forEach(badge => {
+            // Custom tooltip for type-badge, visible when hovering near the badge (entire cell)
+            const typeCells = document.querySelectorAll('td');
+            typeCells.forEach(cell => {
+                const badge = cell.querySelector('.type-badge');
+                if (!badge) return;
                 // Remove default browser tooltip
                 const title = badge.getAttribute('title');
                 if (title) {
                     badge.setAttribute('data-title', title);
                     badge.removeAttribute('title');
                 }
-
-                badge.addEventListener('mouseenter', function(e) {
+                let tooltip = null;
+                let hideTimeout = null;
+                function showTooltip() {
+                    if (tooltip) return;
                     // Remove any existing tooltip
                     const oldTooltip = document.querySelector('.type-tooltip');
                     if (oldTooltip) oldTooltip.remove();
-
                     // Get the tooltip text
                     const tooltipText = badge.getAttribute('data-title');
                     if (!tooltipText) return;
-
                     // Create tooltip
-                    const tooltip = document.createElement('div');
+                    tooltip = document.createElement('div');
                     tooltip.className = 'type-tooltip';
                     tooltip.textContent = tooltipText;
                     document.body.appendChild(tooltip);
-
-                    // Position tooltip close to the badge
-                    const badgeRect = badge.getBoundingClientRect();
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                    
-                    // Calculate position - position tooltip just above the badge with small gap
-                    const tooltipRect = tooltip.getBoundingClientRect();
-                    let left = badgeRect.left + scrollLeft + (badgeRect.width / 2) - (tooltipRect.width / 2);
-                    let top = badgeRect.top + scrollTop - tooltipRect.height - 8; // 8px gap
-                    
-                    // Ensure tooltip stays within viewport
-                    const viewportWidth = window.innerWidth;
-                    if (left < 10) left = 10;
-                    if (left + tooltipRect.width > viewportWidth - 10) {
-                        left = viewportWidth - tooltipRect.width - 10;
+                    // Position tooltip directly above the badge, no gap, and follow on scroll
+                    function positionTooltip() {
+                        const badgeRect = badge.getBoundingClientRect();
+                        const tooltipRect = tooltip.getBoundingClientRect();
+                        
+                        // Calculate position relative to viewport
+                        let left = badgeRect.left + (badgeRect.width / 2) - (tooltipRect.width / 2);
+                        let top = badgeRect.top - tooltipRect.height;
+                        
+                        // Keep tooltip within viewport horizontally
+                        const viewportWidth = window.innerWidth;
+                        if (left < 5) left = 5;
+                        if (left + tooltipRect.width > viewportWidth - 5) {
+                            left = viewportWidth - tooltipRect.width - 5;
+                        }
+                        
+                        // If not enough space above, show below
+                        if (top < 5) {
+                            top = badgeRect.bottom;
+                        }
+                        
+                        // If tooltip would go below viewport, clamp it to bottom
+                        const viewportHeight = window.innerHeight;
+                        if (top + tooltipRect.height > viewportHeight - 5) {
+                            top = viewportHeight - tooltipRect.height - 5;
+                        }
+                        
+                        // Use fixed positioning so tooltip stays with badge
+                        tooltip.style.position = 'fixed';
+                        tooltip.style.left = left + 'px';
+                        tooltip.style.top = top + 'px';
                     }
-                    if (top < 10) {
-                        // If no space above, show below with small gap - use badgeRect.bottom directly  
-                        top = badgeRect.bottom + scrollTop + 5; // smaller gap for below positioning
-                    }
-
-                    tooltip.style.left = left + 'px';
-                    tooltip.style.top = top + 'px';
-
-                    // Show tooltip with animation
+                    positionTooltip();
+                    window.addEventListener('scroll', positionTooltip);
+                    window.addEventListener('resize', positionTooltip);
+                    tooltip._removeListeners = function() {
+                        window.removeEventListener('scroll', positionTooltip);
+                        window.removeEventListener('resize', positionTooltip);
+                    };
                     setTimeout(() => tooltip.classList.add('show'), 10);
-                });
-
-                badge.addEventListener('mouseleave', function(e) {
-                    const tooltip = document.querySelector('.type-tooltip');
+                }
+                function hideTooltip() {
                     if (tooltip) {
                         tooltip.classList.remove('show');
-                        setTimeout(() => tooltip.remove(), 300);
+                        if (tooltip._removeListeners) tooltip._removeListeners();
+                        setTimeout(() => { if (tooltip) { tooltip.remove(); tooltip = null; } }, 300);
                     }
+                }
+                cell.addEventListener('mouseenter', showTooltip);
+                cell.addEventListener('mousemove', showTooltip);
+                cell.addEventListener('mouseleave', function() {
+                    if (hideTimeout) clearTimeout(hideTimeout);
+                    hideTimeout = setTimeout(hideTooltip, 80);
                 });
+                if (badge) {
+                    badge.addEventListener('mouseenter', showTooltip);
+                    badge.addEventListener('mousemove', showTooltip);
+                    badge.addEventListener('mouseleave', function() {
+                        if (hideTimeout) clearTimeout(hideTimeout);
+                        hideTimeout = setTimeout(hideTooltip, 80);
+                    });
+                }
             });
         });
     </script>
