@@ -404,19 +404,40 @@
         }
 
         .status-in-progress {
-            background: linear-gradient(135deg, #00b894, #55efc4);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             animation: statusPulse 2s ease-in-out infinite;
+            border: 2px solid #667eea;
         }
 
         .status-completed {
             background: linear-gradient(135deg, #0984e3, #74b9ff);
             color: white;
+            border: 2px solid #0984e3;
         }
 
         .status-in-review {
             background: linear-gradient(135deg, #fdcb6e, #e17055);
             color: white;
+            border: 2px solid #fdcb6e;
+        }
+
+        .status-published {
+            background: linear-gradient(135deg, #00b894, #55efc4);
+            color: white;
+            border: 2px solid #00b894;
+        }
+
+        .status-on-hold {
+            background: linear-gradient(135deg, #636e72, #2d3436);
+            color: white;
+            border: 2px solid #636e72;
+        }
+
+        .status-cancelled {
+            background: linear-gradient(135deg, #d63031, #e84393);
+            color: white;
+            border: 2px solid #d63031;
         }
 
         @keyframes statusPulse {
@@ -508,6 +529,81 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Published entries first -->
+                    <tr>
+                            <td class="team-name">Rahul Kamboj</td>
+                            <td><span class="type-badge type-blog" title="Remote Stand-ups: Process or Pain">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/Rahul Kamboj.jpg" alt="Rahul Kamboj" class="member-photo" title="Rahul Kamboj">
+                            </div>
+                        </td>
+                        <td><span class="status status-published">Published</span></td>
+                    </tr>
+                    <tr>
+                        <td class="team-name">Neha Grover</td>
+                        <td><span class="type-badge type-blog" title="Scrum is Not For You">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/Neha Grover.jpeg" alt="Neha Grover" class="member-photo" title="Neha Grover">
+                            </div>
+                        </td>
+                        <td><span class="status status-published">Published</span></td>
+                    </tr>
+                    
+                    <!-- In Review entries second -->
+                    <tr>
+                            <td class="team-name">Harshit Wadhwa</td>
+                            <td><span class="type-badge type-blog" title="My Experiments with GenAI">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/Harshit Wadhwa.jpeg" alt="Harshit Wadhwa" class="member-photo" title="Harshit Wadhwa">
+                            </div>
+                        </td>
+                        <td><span class="status status-in-review">In Review</span></td>
+                    </tr>
+                    <tr>
+                            <td class="team-name">Ajmal Hassan</td>
+                            <td><span class="type-badge type-blog" title="Create a basic chatbot using langchain and langgraph">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/Ajmal Hasan.jpeg" alt="Ajmal Hasan" class="member-photo" title="Ajmal Hasan">
+                            </div>
+                        </td>
+                        <td><span class="status status-in-review">In Review</span></td>
+                    </tr>
+                    <tr>
+                        <td class="team-name">Ravindra Jain</td>
+                        <td><span class="type-badge type-blog" title="Cloud Infra Automation">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/Ravindra Jain.jpg" alt="Ravindra Jain" class="member-photo" title="Ravindra Jain">
+                            </div>
+                        </td>
+                        <td><span class="status status-in-review">In Review</span></td>
+                    </tr>
+                    <tr>
+                        <td class="team-name">Rajdeep Dabral</td>
+                        <td><span class="type-badge type-blog" title="Migrating MySQL Data to Elasticsearch: A Practical Guide">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/rajdeep dabral.jpg" alt="Rajdeep Dabral" class="member-photo" title="Rajdeep Dabral" style="object-position: center top; object-fit: cover;">
+                            </div>
+                        </td>
+                        <td><span class="status status-in-review">In Review</span></td>
+                    </tr>
+                    <tr>
+                        <td class="team-name">Vitul Goyal</td>
+                        <td><span class="type-badge type-blog" title="How to write test cases in flutter with bloc/riverpod">Blog</span></td>
+                        <td>
+                            <div class="members-container">
+                                <img src="images/Vitul Goyal.jpeg" alt="Vitul Goyal" class="member-photo" title="Vitul Goyal">
+                            </div>
+                        </td>
+                        <td><span class="status status-in-review">In Review</span></td>
+                    </tr>
+                    
+                    <!-- In Progress entries last -->
                     <tr>
                             <td class="team-name">Team Ashita</td>
                             <td><span class="type-badge type-whitepaper" title="AI-Augmented Data Engineering — using ML for schema inference, anomaly detection, and pipeline optimization.">Whitepaper</span></td>
@@ -541,16 +637,6 @@
                         <td><span class="status status-in-progress">In Progress</span></td>
                     </tr>
                     <tr>
-                            <td class="team-name">Harshit Wadhwa</td>
-                            <td><span class="type-badge type-blog" title="My Experiments with GenAI">Blog</span></td>
-                        <td>
-                            <div class="members-container">
-                                <img src="images/Harshit Wadhwa.jpeg" alt="Harshit Wadhwa" class="member-photo" title="Harshit Wadhwa">
-                            </div>
-                        </td>
-                        <td><span class="status status-in-progress">In Review</span></td>
-                    </tr>
-                    <tr>
                             <td class="team-name">Krishna Jain</td>
                             <td><span class="type-badge type-blog" title="Spark optimization Techniques">Blog</span></td>
                         <td>
@@ -559,67 +645,6 @@
                             </div>
                         </td>
                         <td><span class="status status-in-progress">In Progress</span></td>
-                    <tr>
-                            <td class="team-name">Ajmal Hassan</td>
-                            <td><span class="type-badge type-blog" title="Create a basic chatbot using langchain and langgraph">Blog</span></td>
-                        <td>
-                            <div class="members-container">
-                                <img src="images/Ajmal Hasan.jpeg" alt="Ajmal Hasan" class="member-photo" title="Ajmal Hasan">
-                            </div>
-                        </td>
-                        <td><span class="status status-in-progress">In Review</span></td>
-                    </tr>
-                    <tr>
-                            <td class="team-name">Rahul Kamboj</td>
-                            <td><span class="type-badge type-blog" title="Remote Stand-ups: Process or Pain">Blog</span></td>
-                        <td>
-                            <div class="members-container">
-                                <img src="images/Rahul Kamboj.jpg" alt="Rahul Kamboj" class="member-photo" title="Rahul Kamboj">
-                            </div>
-                        </td>
-                        <td><span class="status status-in-review">Published</span></td>
-                    </tr>
-                    <tr>
-                        <td class="team-name">Ravindra Jain</td>
-                        <td><span class="type-badge type-blog" title="Cloud Infra Automation">Blog</span></td>
-                        <td>
-                            <div class="members-container">
-                                <img src="images/Ravindra Jain.jpg" alt="Ravindra Jain" class="member-photo" title="Ravindra Jain">
-                            </div>
-                        </td>
-                        <td><span class="status status-in-progress">In Review</span></td>
-                    </tr>
-                    <tr>
-                        <td class="team-name">Rajdeep Dabral</td>
-                        <td><span class="type-badge type-blog" title="Migrating MySQL Data to Elasticsearch: A Practical Guide">Blog</span></td>
-                        <td>
-                            <div class="members-container">
-                                <img src="images/rajdeep dabral.jpg" alt="Rajdeep Dabral" class="member-photo" title="Rajdeep Dabral" style="object-position: center top; object-fit: cover;">
-                            </div>
-                        </td>
-                        <td><span class="status status-in-review">In Review</span></td>
-                    </tr>
-                    </tr>
-                </tbody>
-                    <tr>
-                        <td class="team-name">Neha Grover</td>
-                        <td><span class="type-badge type-blog" title="Scrum is Not For You">Blog</span></td>
-                        <td>
-                            <div class="members-container">
-                                <img src="images/Neha Grover.jpeg" alt="Neha Grover" class="member-photo" title="Neha Grover">
-                            </div>
-                        </td>
-                        <td><span class="status status-in-progress">Published</span></td>
-                    </tr>
-                    <tr>
-                        <td class="team-name">Vitul Goyal</td>
-                        <td><span class="type-badge type-blog" title="How to write test cases in flutter with bloc/riverpod">Blog</span></td>
-                        <td>
-                            <div class="members-container">
-                                <img src="images/Vitul Goyal.jpeg" alt="Vitul Goyal" class="member-photo" title="Vitul Goyal">
-                            </div>
-                        </td>
-                        <td><span class="status status-in-progress">In Review</span></td>
                     </tr>
                     <tr>
                         <td class="team-name">Tanuj Rasane</td>
